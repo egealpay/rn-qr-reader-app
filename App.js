@@ -6,11 +6,36 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import ScannerView from './src/scanner/scanner-view';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import strings from './src/strings';
+import {StatusBar} from "react-native";
 
-const App: () => React$Node = () => {
-    return <ScannerView/>;
+function App() {
+    const Stack = createStackNavigator();
+
+    useEffect(() => {
+        try {
+            StatusBar.setBackgroundColor('#567be2', true);
+        } catch (e) {
+            console.log("Error: ", e);
+        }
+    }, []);
+
+    return <NavigationContainer>
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#567be2',
+                },
+                headerTintColor: '#fff',
+                title: strings.appTitle
+            }}>
+            <Stack.Screen name="Scanner" component={ScannerView}/>
+        </Stack.Navigator>
+    </NavigationContainer>;
 };
 
 export default App;
