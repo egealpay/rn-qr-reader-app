@@ -16,12 +16,18 @@ function ScannerView(props) {
 
     function onSuccess (e) {
         console.log(e);
+
+        Linking.openURL(e.data).catch(err =>
+            console.error('An error occured', err)
+        );
     };
 
     return (
         <QRCodeScanner
             onRead={(e) => onSuccess(e)}
             showMarker={true}
+            reactivate={true}
+            reactivateTimeout={3000}
             flashMode={showFlash ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
             topContent={
                 <View style={{alignItems: 'center'}}>
@@ -38,11 +44,13 @@ function ScannerView(props) {
             }
             cameraProps={{
                 notAuthorizedView: <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-                    <Text>Not authorized</Text>
+                    <Text>{strings.cameraPermissionIsRequired}</Text>
                 </View>,
                 ratio: '1:1',
                 overflow: 'hidden',
             }}
+            permissionDialogTitle={strings.warning}
+            permissionDialogMessage={strings.cameraPermissionIsRequired}
         />
     );
 }
