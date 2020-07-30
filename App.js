@@ -12,6 +12,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import strings from './src/strings';
 import {StatusBar} from "react-native";
+import SplashScreen from 'react-native-splash-screen'
+import PastScansView from './src/past-scans/past-scans-view';
 
 function App() {
     const Stack = createStackNavigator();
@@ -21,6 +23,8 @@ function App() {
             StatusBar.setBackgroundColor('#567be2', true);
         } catch (e) {
             console.log("Error: ", e);
+        } finally {
+            SplashScreen.hide();
         }
     }, []);
 
@@ -33,6 +37,7 @@ function App() {
                 headerTintColor: '#fff',
                 title: strings.appTitle
             }}>
+            <Stack.Screen name="PastScansView" component={PastScansView}/>
             <Stack.Screen name="Scanner" component={ScannerView}/>
         </Stack.Navigator>
     </NavigationContainer>;
