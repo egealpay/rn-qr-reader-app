@@ -11,9 +11,10 @@ import ScannerView from './src/scanner/scanner-view';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import strings from './src/strings';
-import {StatusBar} from "react-native";
-import SplashScreen from 'react-native-splash-screen'
+import {StatusBar} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import PastScansView from './src/past-scans/past-scans-view';
+import {realmService} from './src/RealmService';
 
 function App() {
     const Stack = createStackNavigator();
@@ -22,9 +23,12 @@ function App() {
         try {
             StatusBar.setBackgroundColor('#567be2', true);
         } catch (e) {
-            console.log("Error: ", e);
+            console.log('Error: ', e);
         } finally {
-            SplashScreen.hide();
+            realmService.initDB()
+                .then(() => {
+                    SplashScreen.hide();
+                });
         }
     }, []);
 
@@ -35,7 +39,7 @@ function App() {
                     backgroundColor: '#567be2',
                 },
                 headerTintColor: '#fff',
-                title: strings.appTitle
+                title: strings.appTitle,
             }}>
             <Stack.Screen name="PastScansView" component={PastScansView}/>
             <Stack.Screen name="Scanner" component={ScannerView}/>
