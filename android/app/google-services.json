@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "302296819184",
-    "firebase_url": "https://qr---barcode-scanner.firebaseio.com",
-    "project_id": "qr---barcode-scanner",
-    "storage_bucket": "qr---barcode-scanner.appspot.com"
+    "project_number": "536806955569",
+    "firebase_url": "https://qr---barcode-scanner-f2a98.firebaseio.com",
+    "project_id": "qr---barcode-scanner-f2a98",
+    "storage_bucket": "qr---barcode-scanner-f2a98.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:302296819184:android:c861dcd509dce24856a935",
+        "mobilesdk_app_id": "1:536806955569:android:92343fea31a79267681310",
         "android_client_info": {
-          "package_name": "com.qrscanner"
+          "package_name": "com.ea.software.dev.qrscanner"
         }
       },
       "oauth_client": [
         {
-          "client_id": "302296819184-1dnbg8hbohl38j06jvc77ff7n45ofavd.apps.googleusercontent.com",
+          "client_id": "536806955569-pn6pror8ncu6jlq024munvkog0panat5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.qrscanner",
+            "package_name": "com.ea.software.dev.qrscanner",
             "certificate_hash": "c5a6b7b3f42e438a5e0eea324b698d3f5f465c18"
           }
         },
         {
-          "client_id": "302296819184-j5m8ih855hpfjdc6t78ropep5o3aarg8.apps.googleusercontent.com",
+          "client_id": "536806955569-63qu64ch38e7rp4t04l84s7ba43rhkah.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDqyq2pELhFqjwEgh9bv5XsnABFUHC504s"
+          "current_key": "AIzaSyBtc4E2oq8VIcYvtW8tg9-WHKzdMPH_Fy8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "302296819184-j5m8ih855hpfjdc6t78ropep5o3aarg8.apps.googleusercontent.com",
+              "client_id": "536806955569-63qu64ch38e7rp4t04l84s7ba43rhkah.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

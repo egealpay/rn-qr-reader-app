@@ -1,8 +1,10 @@
 class QR {
+    title;
     data;
     date;
 
-    constructor(data, date) {
+    constructor(title, data, date) {
+        this.title = title;
         this.data = data;
         this.date = date;
     }
@@ -13,6 +15,7 @@ QR.schema = {
     primaryKey: 'localId',
     properties: {
         localId: 'int',
+        title: 'string?',
         data:  'string',
         date: 'date'
     }

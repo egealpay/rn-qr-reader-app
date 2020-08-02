@@ -15,6 +15,8 @@ let strings = new LocalizedStrings({
         allTime: 'All Time',
         flashOn: 'FLASH ON',
         flashOff: 'FLASH OFF',
+        save: 'SAVE',
+        title: 'Title'
     },
     en:{
         appTitle: 'QR & Barcode Scanner',
@@ -29,6 +31,8 @@ let strings = new LocalizedStrings({
         allTime: 'All Time',
         flashOn: 'FLASH ON',
         flashOff: 'FLASH OFF',
+        save: 'SAVE',
+        title: 'Title'
     },
     tr: {
         appTitle: 'QR & Barkod Okuyucu',
@@ -43,6 +47,8 @@ let strings = new LocalizedStrings({
         allTime: 'Tüm Zamanlar',
         flashOn: 'FLASH AÇIK',
         flashOff: 'FLASH KAPALI',
+        save: 'KAYDET',
+        title: 'Başlık'
     }
 });
 

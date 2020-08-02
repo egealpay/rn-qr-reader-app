@@ -1,26 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, View, Text} from 'react-native';
+import {TouchableOpacity, View, Text, FlatList, Linking} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import strings from '../strings';
-import { TabView, SceneMap, TabBar} from 'react-native-tab-view';
-import {realmService} from '../RealmService';
-
-
-const Last10Days = () => (
-    <View style={{flex: 1}} />
-);
-
-const AllTime = () => (
-    <View style={{flex: 1}} />
-);
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {realmService} from '../realm-service';
+import moment from 'moment';
+import Last10Days from './tabs/tab-last-10-days';
+import AllTime from './tabs/tab-all-time';
 
 const renderTabBar = props => (
     <TabBar
         {...props}
         activeColor={'#000'}
         inactiveColor={'#bababa'}
-        indicatorStyle={{ backgroundColor: '#567be2' }}
-        style={{ backgroundColor: 'transparent' }}
+        indicatorStyle={{backgroundColor: '#567be2'}}
+        style={{backgroundColor: 'transparent'}}
     />
 );
 
@@ -28,8 +22,8 @@ function PastScansView(props) {
     const [pastScans, setPastScans] = useState([]);
     const [index, setIndex] = useState(0);
     const [routes] = React.useState([
-        { key: 'first', title: strings.last10Days },
-        { key: 'second', title: strings.allTime },
+        {key: 'first', title: strings.last10Days},
+        {key: 'second', title: strings.allTime},
     ]);
 
     const renderScene = SceneMap({
@@ -39,11 +33,27 @@ function PastScansView(props) {
 
     useEffect(() => {
         setTimeout(() => {
-            let allPastScans = realmService.getAllPastScans();
-            debugger;
-            console.log("allPastScans: ", allPastScans);
+            let pastScans = realmService.getAllPastScans();
+
+            for (const pastScan of pastScans) {
+                pastScan.momentDate = moment(pastScan.date);
+                pastScan.momentDateYYYYMMDD = moment(pastScan.date).format('YYYY-MM-DD');
+            }
+
+            let pastScansArray = Array.from(pastScans);
+            console.log(pastScansArray);
+
+            let pastScansJSX = pastScansArray.map((item) => {
+                return <View>
+                    <Text>{item.title}</Text>
+                    <Text>{item.data}</Text>
+                </View>;
+            });
+
+            setPastScans(pastScansJSX);
         }, 1000);
-    }, []);
+
+    }, [index]);
 
 
     function renderNewScanButton() {
@@ -59,7 +69,7 @@ function PastScansView(props) {
                 backgroundColor: '#567be2',
                 justifyContent: 'center',
                 alignItems: 'center',
-                shadowColor: "#000",
+                shadowColor: '#000',
                 shadowOffset: {
                     width: 1,
                     height: 2,
@@ -87,10 +97,10 @@ function PastScansView(props) {
     function renderTabs() {
         return <TabView
             renderTabBar={renderTabBar}
-            navigationState={{ index, routes }}
+            navigationState={{index, routes}}
             renderScene={renderScene}
             onIndexChange={setIndex}
-        />
+        />;
     }
 
     return <View style={{flex: 1}}>

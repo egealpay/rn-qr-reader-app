@@ -1,23 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
     StyleSheet,
     Text,
     View,
-    Linking,
-    TouchableOpacity,
-    ScrollView,
 } from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import strings from '../strings';
 import OnQRScannedModal from './on-qr-scanned-modal';
+import Button from '../common/button';
+import {realmService} from '../realm-service';
 
 function ScannerView(props) {
     const [showFlash, setShowFlash] = useState(false);
     const [showOnQRScannedModal, setShowOnQRScannedModal] = useState(false);
     const [scannedObject, setScannedObject] = useState(null);
+
+    const scanner = useRef(null);
 
     function onSuccess(e) {
         console.log(e);
@@ -28,16 +28,23 @@ function ScannerView(props) {
 
         setScannedObject(e);
         setShowOnQRScannedModal(true);
-
     };
+
+    function onSave(obj) {
+        realmService.saveScan(obj)
+            .then(() => {
+                setShowOnQRScannedModal(false);
+                scanner.current && scanner.current.reactivate();
+            });
+    }
 
     return (
         <View style={{flex: 1}}>
             <QRCodeScanner
+                ref={scanner}
                 onRead={(e) => onSuccess(e)}
                 showMarker={true}
-                reactivate={true}
-                reactivateTimeout={3000}
+                reactivate={false}
                 flashMode={showFlash ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
                 topContent={
                     <View style={{alignItems: 'center'}}>
@@ -68,25 +75,20 @@ function ScannerView(props) {
                     alignItems: 'center',
                 }}
                 bottomContent={
-                    <TouchableOpacity
+                    <Button
                         onPress={() => setShowFlash(!showFlash)}
-                        style={{
-                            backgroundColor: '#567be2',
-                            flexDirection: 'row',
-                            padding: 16,
-                            paddingLeft: 12,
-                            marginEnd: 16,
-                            borderRadius: 4,
-                        }}>
-                        <Feather name={showFlash ? 'zap' : 'zap-off'} color={'#fff'} size={18}/>
-                        <Text style={{
-                            marginLeft: 8,
-                            color: '#fff',
-                        }}>{showFlash ? strings.flashOn : strings.flashOff}</Text>
-                    </TouchableOpacity>
+                        color={'#567be2'}
+                        text={showFlash ? strings.flashOn : strings.flashOff}
+                        icon={showFlash ? 'zap' : 'zap-off'}
+                    />
                 }
             />
-            <OnQRScannedModal isVisible={showOnQRScannedModal}/>
+            <OnQRScannedModal
+                hideModal={() => setShowOnQRScannedModal(false)}
+                onSave={(obj) => onSave(obj)}
+                isVisible={showOnQRScannedModal}
+                data={scannedObject && scannedObject.data}
+            />
         </View>
     );
 }
