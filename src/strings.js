@@ -12,7 +12,9 @@ let strings = new LocalizedStrings({
         pastScans1: 'It will keep your last 10 days history.',
         pastScans2: 'You can keep your all scanned history by purchasing our gold package.',
         last10Days: 'Last 10 Days',
-        allTime: 'All Time'
+        allTime: 'All Time',
+        flashOn: 'FLASH ON',
+        flashOff: 'FLASH OFF',
     },
     en:{
         appTitle: 'QR & Barcode Scanner',
@@ -24,7 +26,9 @@ let strings = new LocalizedStrings({
         pastScans1: 'It will keep your last 10 days history.',
         pastScans2: 'You can keep your all scanned history by purchasing our gold package.',
         last10Days: 'Last 10 Days',
-        allTime: 'All Time'
+        allTime: 'All Time',
+        flashOn: 'FLASH ON',
+        flashOff: 'FLASH OFF',
     },
     tr: {
         appTitle: 'QR & Barkod Okuyucu',
@@ -36,7 +40,9 @@ let strings = new LocalizedStrings({
         pastScans1: 'Son 10 günde yaptığınız QR okumalarını bulabilirsiniz.',
         pastScans2: 'Tüm QR okumalarınızı görmek için gold üyelik gereklidir.',
         last10Days: 'Son 10 Gün',
-        allTime: 'Tüm Zamanlar'
+        allTime: 'Tüm Zamanlar',
+        flashOn: 'FLASH AÇIK',
+        flashOff: 'FLASH KAPALI',
     }
 });
 
