@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, View, Text, FlatList, Linking} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {TouchableOpacity, View, Text} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import strings from '../strings';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
-import {realmService} from '../realm-service';
-import moment from 'moment';
+import {TabView, TabBar} from 'react-native-tab-view';
+import {InterstitialAd, TestIds} from '@react-native-firebase/admob';
 import Last10Days from './tabs/tab-last-10-days';
 import AllTime from './tabs/tab-all-time';
+
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-3656039189200211/4356382170';
+const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
 const renderTabBar = props => (
     <TabBar
@@ -19,46 +21,37 @@ const renderTabBar = props => (
 );
 
 function PastScansView(props) {
-    const [pastScans, setPastScans] = useState([]);
+    const [isAdWatched, setIsAdWatched] = useState(false);
     const [index, setIndex] = useState(0);
     const [routes] = React.useState([
         {key: 'first', title: strings.last10Days},
         {key: 'second', title: strings.allTime},
     ]);
 
-    const renderScene = SceneMap({
-        first: Last10Days,
-        second: AllTime,
-    });
+    const last10DaysRef = useRef(null);
+    const allTimeRef = useRef(null);
 
     useEffect(() => {
-        setTimeout(() => {
-            let pastScans = realmService.getAllPastScans();
+        const eventListener = interstitial.onAdEvent(type => {});
 
-            for (const pastScan of pastScans) {
-                pastScan.momentDate = moment(pastScan.date);
-                pastScan.momentDateYYYYMMDD = moment(pastScan.date).format('YYYY-MM-DD');
-            }
+        // Start loading the interstitial straight away
+        interstitial.load();
 
-            let pastScansArray = Array.from(pastScans);
-            console.log(pastScansArray);
+        // Unsubscribe from events on unmount
+        return () => {
+            eventListener();
+        };
+    }, []);
 
-            let pastScansJSX = pastScansArray.map((item) => {
-                return <View>
-                    <Text>{item.title}</Text>
-                    <Text>{item.data}</Text>
-                </View>;
-            });
-
-            setPastScans(pastScansJSX);
-        }, 1000);
-
-    }, [index]);
+    function reload() {
+        allTimeRef.current && allTimeRef.current.reload();
+        last10DaysRef.current && last10DaysRef.current.reload();
+    }
 
 
     function renderNewScanButton() {
         return <TouchableOpacity
-            onPress={() => props.navigation.navigate('Scanner')}
+            onPress={() => props.navigation.navigate('Scanner', {reload: () => reload()})}
             style={{
                 position: 'absolute',
                 bottom: 24,
@@ -98,8 +91,24 @@ function PastScansView(props) {
         return <TabView
             renderTabBar={renderTabBar}
             navigationState={{index, routes}}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
+            renderScene={({route}) => {
+                switch (route.key) {
+                    case 'first':
+                        return <Last10Days ref={last10DaysRef}/>;
+                    case 'second':
+                        return <AllTime ref={allTimeRef}/>;
+                    default:
+                        return null;
+            }}}
+            onIndexChange={(_index) => {
+                if (_index === 1 && !isAdWatched) {
+                    // Show ad
+                    interstitial.show();
+                    setIsAdWatched(true);
+                }
+
+                setIndex(_index);
+            }}
         />;
     }
 

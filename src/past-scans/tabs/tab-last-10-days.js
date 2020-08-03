@@ -1,39 +1,59 @@
-import {realmService} from '../../realm-service';
+import {realmService} from '../../repository/realm-service';
 import moment from 'moment';
 import PastScan from '../past-scan';
-import {FlatList, View} from 'react-native';
-import React, {useState, useEffect} from "react";
+import {FlatList, Text, View} from 'react-native';
+import React, {useState, useEffect, useImperativeHandle, forwardRef} from 'react';
+import strings from '../../strings';
 
-function Last10Days(props) {
+const Last10Days = forwardRef((props, ref) => {
     const [pastScans, setPastScans] = useState([]);
+
+    useImperativeHandle(ref, () => ({
+        reload() {
+            loadPastScans();
+        },
+    }));
 
     useEffect(() => {
         setTimeout(() => {
-            let pastScans = realmService.getAllPastScans();
-
-            for (const pastScan of pastScans) {
-                pastScan.momentDate = moment(pastScan.date);
-                pastScan.momentDateYYYYMMDD = moment(pastScan.date).format('YYYY-MM-DD');
-            }
-
-            let pastScansArray = Array.from(pastScans);
-            console.log(pastScansArray);
-
-            setPastScans(pastScansArray);
+            loadPastScans();
         }, 1000);
-    });
+    }, []);
+
+    function loadPastScans() {
+        let pastScans = realmService.getAllPastScans();
+        let pastScansArray = [];
+
+        for (const pastScan of pastScans) {
+            pastScan.momentDate = moment(pastScan.date);
+            pastScan.momentDateYYYYMMDD = moment(pastScan.date).format('YYYY-MM-DD');
+
+            pastScansArray.push(pastScan);
+        }
+
+        let today = moment();
+        let tenDaysAgo = today.subtract(10, 'days').format('YYYY-MM-DD');
+
+        let pastTenDaysScansArray = pastScansArray.filter((pastScan) => pastScan.momentDateYYYYMMDD >= tenDaysAgo);
+
+        setPastScans(pastTenDaysScansArray);
+    }
 
     const renderItem = ({item}) => (
         <PastScan item={item}/>
     );
 
     return <View style={{flex: 1}}>
-        <FlatList data={pastScans}
-                  style={{flex: 1}}
-                  renderItem={renderItem}
-                  keyExtractor={item => item.localId}/>
+        {pastScans.length > 0 ?
+            <FlatList data={pastScans}
+                      style={{flex: 1}}
+                      renderItem={renderItem}
+                      keyExtractor={(item, index) => index.toString()}/> :
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{textAlign: 'center'}}>{strings.noSavedScan}</Text>
+            </View>}
 
     </View>;
-}
+});
 
 export default Last10Days;

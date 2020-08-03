@@ -14,7 +14,7 @@ import strings from './src/strings';
 import {StatusBar} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import PastScansView from './src/past-scans/past-scans-view';
-import {realmService} from './src/realm-service';
+import {realmService} from './src/repository/realm-service';
 
 function App() {
     const Stack = createStackNavigator();

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
     StyleSheet,
     Text,
@@ -10,7 +10,7 @@ import {RNCamera} from 'react-native-camera';
 import strings from '../strings';
 import OnQRScannedModal from './on-qr-scanned-modal';
 import Button from '../common/button';
-import {realmService} from '../realm-service';
+import {realmService} from '../repository/realm-service';
 
 function ScannerView(props) {
     const [showFlash, setShowFlash] = useState(false);
@@ -19,13 +19,15 @@ function ScannerView(props) {
 
     const scanner = useRef(null);
 
+    useEffect(
+        () =>
+            props.navigation.addListener('beforeRemove', (e) => {
+                props.route.params.reload();
+            }),
+        [props.navigation]
+    );
+
     function onSuccess(e) {
-        console.log(e);
-
-        /*Linking.openURL(e.data).catch(err =>
-            console.error('An error occured', err),
-        );*/
-
         setScannedObject(e);
         setShowOnQRScannedModal(true);
     };
@@ -84,7 +86,10 @@ function ScannerView(props) {
                 }
             />
             <OnQRScannedModal
-                hideModal={() => setShowOnQRScannedModal(false)}
+                hideModal={() => {
+                    setShowOnQRScannedModal(false);
+                    scanner.current && scanner.current.reactivate();
+                }}
                 onSave={(obj) => onSave(obj)}
                 isVisible={showOnQRScannedModal}
                 data={scannedObject && scannedObject.data}
