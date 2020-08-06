@@ -7,8 +7,8 @@ import {InterstitialAd, TestIds} from '@react-native-firebase/admob';
 import Last10Days from './tabs/tab-last-10-days';
 import AllTime from './tabs/tab-all-time';
 
-const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-3656039189200211/4356382170';
-const interstitial = InterstitialAd.createForAdRequest(adUnitId);
+//const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-3656039189200211/4356382170';
+//const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
 const renderTabBar = props => (
     <TabBar
@@ -31,7 +31,7 @@ function PastScansView(props) {
     const last10DaysRef = useRef(null);
     const allTimeRef = useRef(null);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const eventListener = interstitial.onAdEvent(type => {});
 
         // Start loading the interstitial straight away
@@ -41,7 +41,7 @@ function PastScansView(props) {
         return () => {
             eventListener();
         };
-    }, []);
+    }, []);*/
 
     function reload() {
         allTimeRef.current && allTimeRef.current.reload();
@@ -81,9 +81,9 @@ function PastScansView(props) {
             <Text style={{textAlign: 'center', fontSize: 16, marginTop: 32}}>
                 {strings.pastScans1}
             </Text>
-            <Text style={{textAlign: 'center', fontSize: 16, marginVertical: 8}}>
+            {/*<Text style={{textAlign: 'center', fontSize: 16, marginVertical: 8}}>
                 {strings.pastScans2}
-            </Text>
+            </Text>*/}
         </View>;
     }
 
@@ -99,11 +99,12 @@ function PastScansView(props) {
                         return <AllTime ref={allTimeRef}/>;
                     default:
                         return null;
-            }}}
+                }
+            }}
             onIndexChange={(_index) => {
                 if (_index === 1 && !isAdWatched) {
                     // Show ad
-                    interstitial.show();
+                    //interstitial.show();
                     setIsAdWatched(true);
                 }
 
