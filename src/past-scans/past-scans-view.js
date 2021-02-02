@@ -3,12 +3,8 @@ import {TouchableOpacity, View, Text} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import strings from '../strings';
 import {TabView, TabBar} from 'react-native-tab-view';
-import {InterstitialAd, TestIds} from '@react-native-firebase/admob';
 import Last10Days from './tabs/tab-last-10-days';
 import AllTime from './tabs/tab-all-time';
-
-//const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-3656039189200211/4356382170';
-//const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
 const renderTabBar = props => (
     <TabBar
@@ -21,7 +17,6 @@ const renderTabBar = props => (
 );
 
 function PastScansView(props) {
-    const [isAdWatched, setIsAdWatched] = useState(false);
     const [index, setIndex] = useState(0);
     const [routes] = React.useState([
         {key: 'first', title: strings.last10Days},
@@ -102,12 +97,6 @@ function PastScansView(props) {
                 }
             }}
             onIndexChange={(_index) => {
-                if (_index === 1 && !isAdWatched) {
-                    // Show ad
-                    //interstitial.show();
-                    setIsAdWatched(true);
-                }
-
                 setIndex(_index);
             }}
         />;
