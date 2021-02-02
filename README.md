@@ -1,4 +1,4 @@
-![alt text](./qr-reader-readme-icon.png "QR Reader App Icon")
+![alt text](github-images/qr-reader-readme-icon.png "QR Reader App Icon")
 
 # RN QR Reader
 
@@ -29,4 +29,7 @@ Framework: React Native
 * React Native Splash Screen
 * React Native Tab View
 
-
+## Screenshots
+![alt text](github-images/ss1-resize.jpg) &nbsp;&nbsp;&nbsp;&nbsp;
+![alt text](github-images/ss2-resize.jpg) &nbsp;&nbsp;&nbsp;&nbsp;
+![alt text](github-images/ss3-resize.jpg)
